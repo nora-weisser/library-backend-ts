@@ -1,56 +1,80 @@
 import { v4 as uuidv4 } from "uuid"
+import pool from "../config/database"
 import type { Book } from "../types"
 
-// In-memory book store (replace with database in production)
-const books: Book[] = [
-  {
-    id: "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    isbn: "9780743273565",
-    quantity: 5,
-    availableQuantity: 5,
-  },
-  {
-    id: "2",
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    isbn: "9780061120084",
-    quantity: 3,
-    availableQuantity: 3,
-  },
-]
-
-export const getAllBooks = (): Book[] => {
-  return books
-}
-
-export const getBookById = (id: string): Book | undefined => {
-  return books.find((book) => book.id === id)
-}
-
-export const addBook = (bookData: Omit<Book, "id">): Book => {
-  const newBook: Book = {
-    id: uuidv4(),
-    ...bookData,
+export const getAllBooks = async (): Promise<Book[]> => {
+  try {
+    const result = await pool.query("SELECT * FROM books ORDER BY title")
+    return result.rows
+  } catch (error) {
+    console.error("Error getting all books:", error)
+    throw error
   }
-
-  books.push(newBook)
-  return newBook
 }
 
-export const updateBook = (id: string, bookData: Partial<Book>): Book | null => {
-  const index = books.findIndex((book) => book.id === id)
-  if (index === -1) return null
-
-  books[index] = { ...books[index], ...bookData }
-  return books[index]
+export const getBookById = async (id: string): Promise<Book | null> => {
+  try {
+    const result = await pool.query("SELECT * FROM books WHERE id = $1", [id])
+    return result.rows.length > 0 ? result.rows[0] : null
+  } catch (error) {
+    console.error("Error getting book by ID:", error)
+    throw error
+  }
 }
 
-export const deleteBook = (id: string): boolean => {
-  const index = books.findIndex((book) => book.id === id)
-  if (index === -1) return false
+export const addBook = async (bookData: Omit<Book, "id">): Promise<Book> => {
+  try {
+    const id = uuidv4()
+    const { title, author, isbn, quantity } = bookData
+    const availableQuantity = quantity
 
-  books.splice(index, 1)
-  return true
+    const result = await pool.query(
+      "INSERT INTO books (id, title, author, isbn, quantity, available_quantity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [id, title, author, isbn, quantity, availableQuantity],
+    )
+
+    return result.rows[0]
+  } catch (error) {
+    console.error("Error adding book:", error)
+    throw error
+  }
+}
+
+export const updateBook = async (id: string, bookData: Partial<Book>): Promise<Book | null> => {
+  try {
+    const fields: string[] = []
+    const values: any[] = []
+    let paramCount = 1
+
+    Object.entries(bookData).forEach(([key, value]) => {
+      if (value !== undefined) {
+        fields.push(`${key} = $${paramCount}`)
+        values.push(value)
+        paramCount++
+      }
+    })
+
+    if (fields.length === 0) {
+      return await getBookById(id)
+    }
+
+    values.push(id)
+    const query = `UPDATE books SET ${fields.join(", ")}, updated_at = NOW() WHERE id = $${paramCount} RETURNING *`
+
+    const result = await pool.query(query, values)
+    return result.rows.length > 0 ? result.rows[0] : null
+  } catch (error) {
+    console.error("Error updating book:", error)
+    throw error
+  }
+}
+
+export const deleteBook = async (id: string): Promise<boolean> => {
+  try {
+    const result = await pool.query("DELETE FROM books WHERE id = $1", [id])
+    return result.rowCount !== null && result.rowCount > 0
+  } catch (error) {
+    console.error("Error deleting book:", error)
+    throw error
+  }
 }

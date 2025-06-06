@@ -26,4 +26,9 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
   res.status(500).json({ message: "Something went wrong!" })
 })
 
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(specs);
+});
+
 export default app
