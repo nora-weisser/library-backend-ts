@@ -1,11 +1,10 @@
 import type { Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
 import type { AuthRequest, User } from "../types"
-import { findUserById } from "../services/user.service"
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key" // Use environment variable in production
 
-export const authenticateToken = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"]
   const token = authHeader && authHeader.split(" ")[1]
 
@@ -14,14 +13,7 @@ export const authenticateToken = async (req: AuthRequest, res: Response, next: N
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as User
-    // Fetch fresh user data from database
-    const user = await findUserById(decoded.id)
-
-    if (!user) {
-      return res.status(403).json({ message: "User not found" })
-    }
-
+    const user = jwt.verify(token, JWT_SECRET) as User
     req.user = user
     next()
   } catch (error) {
