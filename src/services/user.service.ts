@@ -5,13 +5,13 @@ import type { User } from "../types"
 // In-memory user store (replace with database in production)
 const users: User[] = [
   {
-    id: "1",
+    id: uuidv4(),
     username: "admin",
     password: "admin123", 
     role: "admin",
   },
   {
-    id: "2",
+    id: uuidv4(),
     username: "user",
     password: "user123", 
     role: "user",
@@ -39,4 +39,12 @@ export const createUser = (username: string, password: string, role: "admin" | "
 export const generateToken = (user: User): string => {
   const { password, ...userWithoutPassword } = user
   return jwt.sign(userWithoutPassword, JWT_SECRET, { expiresIn: "24h" })
+}
+
+export const getUserByID = (id: string): User | undefined => {
+  return users.find((user) => user.id === id)
+}
+
+export const getAllUsers = (): User[] => {
+  return users
 }

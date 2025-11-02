@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import { findUserByUsername, createUser, generateToken } from "../services/user.service"
+import { findUserByUsername, createUser, generateToken, getUserByID, getAllUsers } from "../services/user.service"
 
 export const login = (req: Request, res: Response) => {
   const { username, password } = req.body
@@ -36,4 +36,19 @@ export const register = (req: Request, res: Response) => {
     token,
     user: { id: newUser.id, username: newUser.username, role: newUser.role },
   })
+}
+
+export const getUser = async (req: Request, res: Response) => {
+  const user = getUserByID(req.params.id);  
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.json(user);
+}
+
+export const getUsers = (_req: Request, res: Response) => {
+  const users = getAllUsers()
+  res.json(users)
 }
