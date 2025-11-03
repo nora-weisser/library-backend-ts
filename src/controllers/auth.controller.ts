@@ -15,7 +15,7 @@ export const login = (req: Request, res: Response) => {
   }
 
   const token = generateToken(user)
-  res.json({ token, user: { id: user.id, username: user.username, role: user.role } })
+  res.json({ token })
 }
 
 export const register = (req: Request, res: Response) => {
@@ -33,8 +33,8 @@ export const register = (req: Request, res: Response) => {
   const token = generateToken(newUser)
 
   res.status(201).json({
-    token,
-    user: { id: newUser.id, username: newUser.username, role: newUser.role },
+    status: "success",
+    message: "User registered successfully.",
   })
 }
 
