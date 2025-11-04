@@ -45,7 +45,10 @@ export const updateBookDetails = (req: Request, res: Response) => {
     return res.status(404).json({ message: "Book not found" })
   }
 
-  res.json(updatedBook)
+  res.json({
+    status: "success",
+    message: `Book updated successfully.`
+  })
 }
 
 export const removeBook = (req: Request, res: Response) => {

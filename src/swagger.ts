@@ -57,6 +57,13 @@ const options = {
             isReturned: { type: "boolean" },
           },
         },
+        Success: {
+          type: "object",
+          properties: {
+            status: { type: "string" },
+            message: { type: "string" },
+          },
+        },
         Error: {
           type: "object",
           properties: {

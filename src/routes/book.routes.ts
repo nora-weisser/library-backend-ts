@@ -95,7 +95,7 @@ router.get("/:id", getBook)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Book'
+ *               $ref: '#/components/schemas/Success'
  *       400:
  *         description: Missing required book information
  *         content:
@@ -137,17 +137,15 @@ router.post("/", authenticateToken, isAdmin, createBook)
  *                 type: string
  *               isbn:
  *                 type: string
- *               quantity:
- *                 type: integer
- *               availableQuantity:
- *                 type: integer
+ *               description:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Book updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Book'
+ *               $ref: '#/components/schemas/Success'
  *       404:
  *         description: Book not found
  *         content:
