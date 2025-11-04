@@ -5,13 +5,13 @@ import type { User } from "../types"
 // In-memory user store (replace with database in production)
 const users: User[] = [
   {
-    id: uuidv4(),
+    userID: uuidv4(),
     username: "admin",
     password: "admin123", 
     role: "admin",
   },
   {
-    id: uuidv4(),
+    userID: uuidv4(),
     username: "user",
     password: "user123", 
     role: "user",
@@ -26,7 +26,7 @@ export const findUserByUsername = (username: string): User | undefined => {
 
 export const createUser = (username: string, password: string, role: "admin" | "user" = "user"): User => {
   const newUser: User = {
-    id: uuidv4(),
+    userID: uuidv4(),
     username,
     password, 
     role,
@@ -42,7 +42,7 @@ export const generateToken = (user: User): string => {
 }
 
 export const getUserByID = (id: string): User | undefined => {
-  return users.find((user) => user.id === id)
+  return users.find((user) => user.userID === id)
 }
 
 export const getAllUsers = (): User[] => {

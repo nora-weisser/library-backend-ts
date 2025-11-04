@@ -1,6 +1,5 @@
 import express from "express"
-import { getUser, getUsers, login, register } from "../controllers/auth.controller"
-import { getAllUsers } from "../services/user.service"
+import { login, register } from "../controllers/auth.controller"
 
 const router = express.Router()
 
@@ -94,52 +93,5 @@ router.post("/login", login)
  *               $ref: '#/components/schemas/Error'
  */
 router.post("/register", register)
-
-/**
- * @swagger
- * /api/auth/user/{id}:
- *   get:
- *     summary: Get user by ID
- *     tags: [Authentication]
- *     security: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: User ID
- *     responses:
- *       200:
- *         description: User details
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
-router.get('/user/:id', getUser);
-
-/**
- * @swagger
- * /api/auth/users:
- *   get:
- *     summary: Get all users
- *     tags: [Authentication]
- *     security: []
- *     responses:
- *       200:
- *         description: All User details
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- */
-router.get('/users', getUsers);
 
 export default router

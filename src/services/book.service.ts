@@ -1,23 +1,21 @@
 import { v4 as uuidv4 } from "uuid"
-import type { Book } from "../types"
+import type { Book, BookInstance } from "../types"
 
 // In-memory book store (replace with database in production)
 const books: Book[] = [
   {
-    id: "1",
+    bookID: "1",
     title: "The Great Gatsby",
     author: "F. Scott Fitzgerald",
     isbn: "9780743273565",
-    quantity: 5,
-    availableQuantity: 5,
+    description: "",
   },
   {
-    id: "2",
+    bookID: "2",
     title: "To Kill a Mockingbird",
     author: "Harper Lee",
+    description: "",
     isbn: "9780061120084",
-    quantity: 3,
-    availableQuantity: 3,
   },
 ]
 
@@ -26,12 +24,12 @@ export const getAllBooks = (): Book[] => {
 }
 
 export const getBookById = (id: string): Book | undefined => {
-  return books.find((book) => book.id === id)
+  return books.find((book) => book.bookID === id)
 }
 
-export const addBook = (bookData: Omit<Book, "id">): Book => {
+export const addBook = (bookData: Omit<Book, "bookID">): Book => {
   const newBook: Book = {
-    id: uuidv4(),
+    bookID: uuidv4(),
     ...bookData,
   }
 
@@ -39,8 +37,28 @@ export const addBook = (bookData: Omit<Book, "id">): Book => {
   return newBook
 }
 
+export const addBookInstances = (bookID: string, totalQuantity: number): BookInstance[] => {
+  const newInstances: BookInstance[] = []
+
+  for (let i = 0; i < totalQuantity; i++) {
+    const instance: BookInstance = {
+      bookInstanceID: uuidv4(),
+      bookID,
+      isAvailable: true,
+      borrowedBy: null,
+      borrowedAt: null,
+      deadline: null,
+      remark: null
+    }
+
+    newInstances.push(instance)
+  }
+
+  return newInstances
+}
+
 export const updateBook = (id: string, bookData: Partial<Book>): Book | null => {
-  const index = books.findIndex((book) => book.id === id)
+  const index = books.findIndex((book) => book.bookID === id)
   if (index === -1) return null
 
   books[index] = { ...books[index], ...bookData }
@@ -48,7 +66,7 @@ export const updateBook = (id: string, bookData: Partial<Book>): Book | null => 
 }
 
 export const deleteBook = (id: string): boolean => {
-  const index = books.findIndex((book) => book.id === id)
+  const index = books.findIndex((book) => book.bookID === id)
   if (index === -1) return false
 
   books.splice(index, 1)

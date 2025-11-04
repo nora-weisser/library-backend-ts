@@ -70,8 +70,9 @@ router.get("/:id", getBook)
  *             required:
  *               - title
  *               - author
+ *               - description
  *               - isbn
- *               - quantity
+ *               - totalQuantity
  *             properties:
  *               title:
  *                 type: string
@@ -79,10 +80,13 @@ router.get("/:id", getBook)
  *               author:
  *                 type: string
  *                 example: "George Orwell"
+ *               description:
+ *                 type: string
+ *                 example: ""
  *               isbn:
  *                 type: string
  *                 example: "9780451524935"
- *               quantity:
+ *               totalQuantity:
  *                 type: integer
  *                 example: 5
  *     responses:

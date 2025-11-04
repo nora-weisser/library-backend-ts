@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import { getAllBooks, getBookById, addBook, updateBook, deleteBook } from "../services/book.service"
+import { getAllBooks, getBookById, addBook, updateBook, deleteBook, addBookInstances } from "../services/book.service"
 
 export const getBooks = (_req: Request, res: Response) => {
   const books = getAllBooks()
@@ -17,21 +17,25 @@ export const getBook = (req: Request, res: Response) => {
 }
 
 export const createBook = (req: Request, res: Response) => {
-  const { title, author, isbn, quantity } = req.body
+  const { isbn, title, author, description, totalQuantity } = req.body
 
-  if (!title || !author || !isbn || !quantity) {
+  if (!title || !author || !isbn || !totalQuantity) {
     return res.status(400).json({ message: "Missing required book information" })
   }
 
   const newBook = addBook({
+    isbn,
     title,
     author,
-    isbn,
-    quantity: Number(quantity),
-    availableQuantity: Number(quantity),
+    description
   })
 
-  res.status(201).json(newBook)
+  const instances = addBookInstances(newBook.bookID, totalQuantity)
+
+  res.status(201).json({
+    status: "success",
+    message: `Book ${newBook.title} by ${newBook.author} added successfully.`
+  })
 }
 
 export const updateBookDetails = (req: Request, res: Response) => {

@@ -30,20 +30,20 @@ const options = {
         User: {
           type: "object",
           properties: {
-            id: { type: "string" },
+            userID: { type: "string" },
             username: { type: "string" },
-            role: { type: "string", enum: ["admin", "user"] },
+            password: { type: "string" },
+            role: { type: "string", enum: ["admin", "user"] }
           },
         },
         Book: {
           type: "object",
           properties: {
-            id: { type: "string" },
+            bookID: { type: "string" },
             title: { type: "string" },
             author: { type: "string" },
             isbn: { type: "string" },
-            quantity: { type: "integer" },
-            availableQuantity: { type: "integer" },
+            description: { type: "string" }
           },
         },
         BorrowRecord: {
