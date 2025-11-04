@@ -9,7 +9,7 @@ const router = express.Router()
  * /api/users/{id}:
  *   get:
  *     summary: Get user by ID
- *     tags: [Authentication]
+ *     tags: [Users]
  *     security: []
  *     parameters:
  *       - in: path
@@ -39,7 +39,7 @@ router.get('/:id', getUser);
  * /api/users:
  *   get:
  *     summary: Get all users
- *     tags: [Authentication]
+ *     tags: [Users]
  *     security: []
  *     responses:
  *       200:
