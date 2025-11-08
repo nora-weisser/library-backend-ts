@@ -2,7 +2,7 @@ import type { Request } from "express"
 
 // User related types
 export interface User {
-  id: string
+  userID: string
   username: string
   password: string // In a real app, this would be hashed
   role: "admin" | "user"
@@ -14,20 +14,20 @@ export interface AuthRequest extends Request {
 
 // Book related types
 export interface Book {
-  id: string
+  bookID: string
+  isbn: string
   title: string
   author: string
-  isbn: string
-  quantity: number
-  availableQuantity: number
+  description: string
 }
 
 // Borrow related types
-export interface BorrowRecord {
-  id: string
-  userId: string
-  bookId: string
-  borrowDate: Date
-  returnDate: Date | null
-  isReturned: boolean
+export interface BookInstance {
+  bookInstanceID: string
+  bookID: string
+  isAvailable: boolean
+  borrowedAt: Date | null
+  borrowedBy: Date | null
+  deadline: Date | null
+  remark: string | null
 }

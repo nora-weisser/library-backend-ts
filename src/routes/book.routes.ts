@@ -70,8 +70,9 @@ router.get("/:id", getBook)
  *             required:
  *               - title
  *               - author
+ *               - description
  *               - isbn
- *               - quantity
+ *               - totalQuantity
  *             properties:
  *               title:
  *                 type: string
@@ -79,10 +80,13 @@ router.get("/:id", getBook)
  *               author:
  *                 type: string
  *                 example: "George Orwell"
+ *               description:
+ *                 type: string
+ *                 example: ""
  *               isbn:
  *                 type: string
  *                 example: "9780451524935"
- *               quantity:
+ *               totalQuantity:
  *                 type: integer
  *                 example: 5
  *     responses:
@@ -91,7 +95,7 @@ router.get("/:id", getBook)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Book'
+ *               $ref: '#/components/schemas/Success'
  *       400:
  *         description: Missing required book information
  *         content:
@@ -133,17 +137,15 @@ router.post("/", authenticateToken, isAdmin, createBook)
  *                 type: string
  *               isbn:
  *                 type: string
- *               quantity:
- *                 type: integer
- *               availableQuantity:
- *                 type: integer
+ *               description:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Book updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Book'
+ *               $ref: '#/components/schemas/Success'
  *       404:
  *         description: Book not found
  *         content:

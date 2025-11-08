@@ -36,8 +36,6 @@ const router = express.Router()
  *               properties:
  *                 token:
  *                   type: string
- *                 user:
- *                   $ref: '#/components/schemas/User'
  *       401:
  *         description: Invalid credentials
  *         content:
@@ -83,10 +81,10 @@ router.post("/login", login)
  *             schema:
  *               type: object
  *               properties:
- *                 token:
+ *                 status:
  *                   type: string
- *                 user:
- *                   $ref: '#/components/schemas/User'
+ *                 message:
+ *                   type: string
  *       409:
  *         description: Username already exists
  *         content:
