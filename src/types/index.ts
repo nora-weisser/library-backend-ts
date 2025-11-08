@@ -21,13 +21,13 @@ export interface Book {
   description: string
 }
 
-// Borrow related types
+// Book Instance related types
 export interface BookInstance {
   bookInstanceID: string
   bookID: string
   isAvailable: boolean
   borrowedAt: Date | null
-  borrowedBy: Date | null
+  borrowedBy: string | null
   deadline: Date | null
   remark: string | null
 }

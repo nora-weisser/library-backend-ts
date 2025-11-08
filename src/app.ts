@@ -5,7 +5,7 @@ import { specs } from "./swagger"
 import authRoutes from "./routes/auth.routes"
 import bookRoutes from "./routes/book.routes"
 import userRoutes from "./routes/user.routes"
-// import borrowRoutes from "./routes/borrow.routes"
+import borrowRoutes from "./routes/borrow.routes"
 
 const app = express()
 
@@ -20,7 +20,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
 app.use("/api/auth", authRoutes)
 app.use("/api/books", bookRoutes)
 app.use("/api/users", userRoutes)
-// app.use("/api/borrow", borrowRoutes)
+app.use("/api/borrow", borrowRoutes)
 
 // Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

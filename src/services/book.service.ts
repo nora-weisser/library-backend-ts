@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import type { Book, BookInstance } from "../types"
+import { bookInstances } from "./borrow.service"
 
 // In-memory book store (replace with database in production)
 const books: Book[] = [
@@ -52,6 +53,7 @@ export const addBookInstances = (bookID: string, totalQuantity: number): BookIns
     }
 
     newInstances.push(instance)
+    bookInstances.push(instance)
   }
 
   return newInstances
