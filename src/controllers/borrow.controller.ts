@@ -1,6 +1,7 @@
 import type { Response } from "express"
 import type { AuthRequest } from "../types"
-import { getAllBorrowRecords, getUserBorrowRecords, borrowBook } from "../services/borrow.service"
+import { getAllBorrowRecords, getUserBorrowRecords, borrowBook, returnBook } from "../services/borrow.service"
+import { getBookById } from "../services/book.service"
 
 export const getBorrowRecords = (req: AuthRequest, res: Response) => {
   if (!req.user) {
@@ -18,20 +19,57 @@ export const borrowBookHandler = (req: AuthRequest, res: Response) => {
     return res.status(401).json({ message: "Authentication required" })
   }
 
-  const { bookId } = req.body
+  const { bookCopyId } = req.body
 
-  if (!bookId) {
-    return res.status(400).json({ message: "Book ID is required" })
+  if (!bookCopyId) {
+    return res.status(400).json({ message: "Book Copy ID is required" })
   }
 
-  const record = borrowBook(req.user.userID, bookId)
+  const record = borrowBook(req.user.userID, bookCopyId)
 
   if (!record) {
-    return res.status(400).json({ message: "Book not available for borrowing" })
+    return res.status(400).json({
+      status: "error",
+      message: "Sorry, the book copy you requested is currently unavailable.",
+    })
   }
+
+  const book = getBookById(record.bookID)
 
   res.status(201).json({
     status: "success",
-    message: `Book has been borrowed successfully.`
+    message: `You have successfully borrowed the book${book ? ` '${book.title}'` : ""}.`,
+    bookTitle: book?.title,
+    borrowedBy: req.user.userID,
+    bookCopyID: record.bookCopyID,
+    deadline: record.deadline,
+  })
+}
+
+export const returnBookHandler = (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Authentication required" })
+  }
+
+  const { bookCopyId } = req.body
+
+  if (!bookCopyId) {
+    return res.status(400).json({ message: "Book Copy ID is required" })
+  }
+
+  const record = returnBook(req.user.userID, bookCopyId)
+
+  if (!record) {
+    return res.status(400).json({
+      status: "error",
+      message: "This book was not borrowed by you.",
+    })
+  }
+
+  const book = getBookById(record.bookID)
+
+  res.json({
+    status: "success",
+    message: `The book${book ? ` '${book.title}'` : ""} has been successfully returned.`,
   })
 }

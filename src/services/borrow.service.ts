@@ -1,40 +1,61 @@
-import { v4 as uuidv4 } from "uuid"
-import type { BookInstance } from "../types"
-import { getBookById, updateBook } from "./book.service"
+import type { BookCopy } from "../types"
 
-// In-memory borrow records store (replace with database in production)
-export const bookInstances: BookInstance[] = []
+export const bookCopies: BookCopy[] = []
 
-export const getAllBorrowRecords = (): BookInstance[] => {
-  return bookInstances
+export const getAllBorrowRecords = (): BookCopy[] => {
+  return bookCopies
 }
 
-export const getUserBorrowRecords = (userId: string): BookInstance[] => {
-  return bookInstances.filter((record) => record.borrowedBy === userId)
+export const getUserBorrowRecords = (userId: string): BookCopy[] => {
+  return bookCopies.filter((record) => record.borrowedBy === userId)
 }
 
-export const getBookCopyById = (id: string): BookInstance | undefined => {
-  return bookInstances.find((book) => book.bookInstanceID === id)
+export const getBookCopyById = (id: string): BookCopy | undefined => {
+  return bookCopies.find((copy) => copy.bookCopyID === id)
 }
 
-export const updateBookInstance = (id: string, bookData: Partial<BookInstance>): BookInstance | null => {
-  const index = bookInstances.findIndex((book) => book.bookInstanceID === id)
+export const updateBookCopy = (id: string, bookData: Partial<BookCopy>): BookCopy | null => {
+  const index = bookCopies.findIndex((copy) => copy.bookCopyID === id)
   if (index === -1) return null
 
-  bookInstances[index] = { ...bookInstances[index], ...bookData }
-  return bookInstances[index]
+  bookCopies[index] = { ...bookCopies[index], ...bookData }
+  return bookCopies[index]
 }
 
-export const borrowBook = (userId: string, bookId: string): BookInstance | null => {
-  const book = getBookCopyById(bookId)
+export const borrowBook = (userId: string, bookCopyId: string): BookCopy | null => {
+  const bookCopy = getBookCopyById(bookCopyId)
 
-  if (!book || book.isAvailable == false) {
+  if (!bookCopy || bookCopy.isAvailable == false) {
     return null
   }
 
-  const currentDate = new Date();
-  const deadline = currentDate.setDate(currentDate.getDate() + 30)
-  updateBookInstance(bookId, { isAvailable: false, borrowedBy: userId, borrowedAt: currentDate, deadline: new Date(deadline)})
+  const borrowedAt = new Date()
+  const deadline = new Date()
+  deadline.setDate(deadline.getDate() + 30)
 
-  return book
+  updateBookCopy(bookCopyId, {
+    isAvailable: false,
+    borrowedBy: userId,
+    borrowedAt: borrowedAt,
+    deadline: deadline,
+  })
+
+  return bookCopy
+}
+
+export const returnBook = (userId: string, bookCopyId: string): BookCopy | null => {
+  const bookCopy = getBookCopyById(bookCopyId)
+
+  if (!bookCopy || bookCopy.borrowedBy !== userId) {
+    return null
+  }
+
+  updateBookCopy(bookCopyId, {
+    isAvailable: true,
+    borrowedBy: null,
+    borrowedAt: null,
+    deadline: null,
+  })
+
+  return bookCopy
 }

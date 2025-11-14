@@ -22,8 +22,8 @@ export interface Book {
 }
 
 // Book Instance related types
-export interface BookInstance {
-  bookInstanceID: string
+export interface BookCopy {
+  bookCopyID: string
   bookID: string
   isAvailable: boolean
   borrowedAt: Date | null

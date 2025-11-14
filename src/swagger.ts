@@ -46,6 +46,18 @@ const options = {
             description: { type: "string" }
           },
         },
+        BookCopy: {
+          type: "object",
+          properties: {
+            bookCopyID: { type: "string" },
+            bookID: { type: "string" },
+            isAvailable: { type: "boolean" },
+            borrowedAt: { type: "string", format: "date-time", nullable: true },
+            borrowedBy: { type: "string", nullable: true },
+            deadline: { type: "string", format: "date-time", nullable: true },
+            remark: { type: "string", nullable: true }
+          },
+        },
         BorrowRecord: {
           type: "object",
           properties: {

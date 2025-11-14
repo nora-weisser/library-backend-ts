@@ -1,5 +1,5 @@
 import express from "express"
-import { borrowBookHandler, getBorrowRecords } from "../controllers/borrow.controller"
+import { borrowBookHandler, getBorrowRecords, returnBookHandler } from "../controllers/borrow.controller"
 import { authenticateToken } from "../middleware/auth"
 
 const router = express.Router()
@@ -44,11 +44,11 @@ router.get("/", getBorrowRecords)
  *           schema:
  *             type: object
  *             required:
- *               - bookId
+ *               - bookCopyId
  *             properties:
- *               bookId:
+ *               bookCopyId:
  *                 type: string
- *                 example: "1"
+ *                 example: "uuid-of-book-copy"
  *     responses:
  *       201:
  *         description: Book borrowed successfully
@@ -67,5 +67,50 @@ router.get("/", getBorrowRecords)
  */
 router.post("/borrow", borrowBookHandler)
 
+/**
+ * @swagger
+ * /api/borrow/return:
+ *   post:
+ *     summary: Return a borrowed book
+ *     tags: [Borrowing]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - bookCopyId
+ *             properties:
+ *               bookCopyId:
+ *                 type: string
+ *                 description: Book copy ID
+ *                 example: "book-copy-uuid"
+ *     responses:
+ *       200:
+ *         description: Book returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: The book 'Effective Java' has been successfully returned.
+ *       400:
+ *         description: Book was not borrowed by this user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ */
+router.post("/return", returnBookHandler)
 
 export default router
