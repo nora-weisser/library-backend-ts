@@ -28,36 +28,36 @@ A backend library management system built with Express.js and TypeScript. This s
 ## Installation
 
 1. Clone the repository:
-\`\`\`bash
+```bash
 git clone https://github.com/nora-weisser/library-backend-ts
 cd library-backend-ts
-\`\`\`
+```
 
 2. Install dependencies:
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ## Running the Application
 
 ### Development Mode
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 The server will start on `http://localhost:3000` with hot-reloading enabled.
 
 ### Production Mode
-\`\`\`bash
+```bash
 npm run build
 npm start
-\`\`\`
+```
 
 ## API Documentation
 
 Once the server is running, access the interactive API documentation at:
-\`\`\`
+```
 http://localhost:3000/api-docs
-\`\`\`
+```
 
 ## Database Schema
 
@@ -95,97 +95,97 @@ http://localhost:3000/api-docs
 ### Authentication
 
 #### Register a New User
-\`\`\`http
+```http
 POST /api/auth/register
-\`\`\`
+```
 
 #### Login
-\`\`\`http
+```http
 POST /api/auth/login
-\`\`\`
+```
 
 
 ### Books
 
 #### Get All Books
-\`\`\`http
+```http
 GET /api/books
-\`\`\`
+```
 
 #### Get Book by ID
-\`\`\`http
+```http
 GET /api/books/:id
-\`\`\`
+```
 
 #### Create a Book (Admin only)
-\`\`\`http
+```http
 POST /api/books
-\`\`\`
+```
 
 #### Update a Book (Admin only)
-\`\`\`http
+```http
 PUT /api/books/:id
-\`\`\`
+```
 
 #### Delete a Book (Admin only)
-\`\`\`http
+```http
 DELETE /api/books/:id
-\`\`\`
+```
 
 **Note**: A book can only be deleted if none of its copies are currently borrowed.
 
 ### Book Copies
 
 #### Delete a Book Copy (Admin only)
-\`\`\`http
+```http
 DELETE /api/books/copies/:copyId
-\`\`\`
+```
 
 **Note**: A book copy can only be deleted if it is not currently borrowed.
 
 #### Update Book Copy Remark (Admin only)
-\`\`\`http
+```http
 PUT /api/books/copies/:copyId/remark
-\`\`\`
+```
 
 ### Borrowing
 
 #### Borrow a Book
-\`\`\`http
+```http
 POST /api/borrow/borrow
-\`\`\`
+```
 
 #### Return a Book
-\`\`\`http
+```http
 POST /api/borrow/return
-\`\`\`
+```
 
 #### Get Borrow Records
-\`\`\`http
+```http
 GET /api/borrow
-\`\`\`
+```
 
 ### Users (Admin only)
 
 #### Get All Users
-\`\`\`http
+```http
 GET /api/users
-\`\`\`
+```
 
 #### Get User by ID
-\`\`\`http
+```http
 GET /api/users/:id
-\`\`\`
+```
 
 #### Get User Dashboard
-\`\`\`http
+```http
 GET /api/users/dashboard
-\`\`\`
+```
 
 #### Delete User (Admin only)
-\`\`\`http
+```http
 DELETE /api/users/:id
-\`\`\`
+```
 
 ## System Flow
 
