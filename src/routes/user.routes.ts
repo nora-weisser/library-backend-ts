@@ -1,8 +1,48 @@
 import express from "express"
-import { getUser, getUsers } from "../controllers/auth.controller"
-
+import { getUser, getUsers, getUserDashboard } from "../controllers/auth.controller"
+import { authenticateToken } from "../middleware/auth"
 
 const router = express.Router()
+
+/**
+ * @swagger
+ * /api/users/dashboard:
+ *   get:
+ *     summary: Get user dashboard with borrowed books and fines
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User dashboard information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userInfo:
+ *                   type: object
+ *                   properties:
+ *                     userID:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                 booksBorrowed:
+ *                   type: number
+ *                 borrowedBooks:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 totalFines:
+ *                   type: number
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/dashboard", authenticateToken, getUserDashboard)
 
 /**
  * @swagger
@@ -32,7 +72,7 @@ const router = express.Router()
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getUser);
+router.get("/:id", getUser)
 
 /**
  * @swagger
@@ -51,6 +91,6 @@ router.get('/:id', getUser);
  *               items:
  *                  $ref: '#/components/schemas/User'
  */
-router.get('/', getUsers);
+router.get("/", getUsers)
 
 export default router

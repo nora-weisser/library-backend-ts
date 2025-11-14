@@ -1,5 +1,5 @@
 import express from "express"
-import { getBooks, getBook, createBook, updateBookDetails, removeBook } from "../controllers/book.controller"
+import { getBooks, getBook, createBook, updateBookDetails, removeBook, removeBookCopy, updateCopyRemark } from "../controllers/book.controller"
 import { authenticateToken, isAdmin } from "../middleware/auth"
 
 const router = express.Router()
@@ -189,5 +189,104 @@ router.put("/:id", authenticateToken, isAdmin, updateBookDetails)
  *         description: Forbidden - Admin access required
  */
 router.delete("/:id", authenticateToken, isAdmin, removeBook)
+
+/**
+ * @swagger
+ * /api/books/copies/{copyId}:
+ *   delete:
+ *     summary: Delete a book copy (Admin only)
+ *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: copyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Book Copy ID
+ *     responses:
+ *       204:
+ *         description: Book copy deleted successfully
+ *       400:
+ *         description: Cannot delete - copy is currently borrowed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Book copy not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admin access required
+ */
+router.delete("/copies/:copyId", authenticateToken, isAdmin, removeBookCopy)
+
+/**
+ * @swagger
+ * /api/books/copies/{copyId}/remark:
+ *   put:
+ *     summary: Update a book copy remark (Admin only)
+ *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: copyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Book Copy ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - remark
+ *             properties:
+ *               remark:
+ *                 type: string
+ *                 example: "Book has water damage on page 15"
+ *     responses:
+ *       200:
+ *         description: Book copy remark updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Book copy remark updated successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/BookCopy'
+ *       400:
+ *         description: Remark is required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Book copy not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admin access required
+ */
+router.put("/copies/:copyId/remark", authenticateToken, isAdmin, updateCopyRemark)
 
 export default router
