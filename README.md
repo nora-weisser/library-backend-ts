@@ -77,7 +77,6 @@ http://localhost:3000/api-docs
 | title       | string | Title of the book                     |
 | author      | string | Author of the book                    |
 | description | string | Description of the book               |
-| totalQuantity | number | Total number of copies available |
 
 ### BookCopy Table
 | Field            | Type    | Description                                      |
