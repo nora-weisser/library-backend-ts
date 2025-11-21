@@ -16,6 +16,10 @@ app.use(express.json())
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
 
+app.get('/api-docs.json', (req, res) => {
+  res.json(specs)
+})
+
 // Routes
 app.use("/api/auth", authRoutes)
 app.use("/api/books", bookRoutes)
