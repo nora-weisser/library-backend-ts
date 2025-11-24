@@ -2,9 +2,13 @@ import type { Request, Response } from "express"
 import { getAllBooks, getBookById, addBook, updateBook, deleteBook, addBookCopies, deleteBookCopy, updateBookCopyRemark } from "../services/book.service"
 
 export const getBooks = (_req: Request, res: Response) => {
-  const books = getAllBooks()
-  res.json(books)
-}
+  try {
+    const books = getAllBooks(); 
+    res.json(books);
+  } catch (error) {
+    res.status(500).send('Internal server error'); 
+  }
+};
 
 export const getBook = (req: Request, res: Response) => {
   const book = getBookById(req.params.id)
