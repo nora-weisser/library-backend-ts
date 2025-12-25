@@ -4,3 +4,4 @@ dist/
 .env.example
 coverage/
 mochawesome-report/
+.DS_Store
