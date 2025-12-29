@@ -1,24 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import type { Book, BookCopy } from "../types"
-import { bookCopies } from "./borrow.service"
-
-// In-memory book store (replace with database in production)
-const books: Book[] = [
-  {
-    bookID: "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    isbn: "9780743273565",
-    description: "",
-  },
-  {
-    bookID: "2",
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    description: "",
-    isbn: "9780061120084",
-  },
-]
+import { bookCopies, books } from "../data/store"
 
 export const getAllBooks = (): Book[] => {
   return books

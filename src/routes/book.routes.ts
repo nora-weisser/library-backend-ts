@@ -1,5 +1,5 @@
 import express from "express"
-import { getBooks, getBook, createBook, updateBookDetails, removeBook, removeBookCopy, updateCopyRemark } from "../controllers/book.controller"
+import { getBooks, getBook, createBook, updateBookDetails, removeBook, removeBookCopy, updateCopyRemark, getBookInstances } from "../controllers/book.controller"
 import { authenticateToken, isAdmin } from "../middleware/auth"
 
 const router = express.Router()
@@ -288,5 +288,56 @@ router.delete("/copies/:copyId", authenticateToken, isAdmin, removeBookCopy)
  *         description: Forbidden - Admin access required
  */
 router.put("/copies/:copyId/remark", authenticateToken, isAdmin, updateCopyRemark)
+
+/**
+ * @swagger
+ * /api/books/{bookId}/instances:
+ *   get:
+ *     summary: Get all instances (copies) of a book by book ID
+ *     tags: [Books]
+ *     security: []
+ *     parameters:
+ *       - in: path
+ *         name: bookId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Book ID
+ *     responses:
+ *       200:
+ *         description: List of book instances
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   bookInstanceID:
+ *                     type: string
+ *                     example: bi-1
+ *                   bookID:
+ *                     type: string
+ *                     example: b-10
+ *                   isAvailable:
+ *                     type: boolean
+ *                     example: true
+ *                   borrowedBy:
+ *                     type: string
+ *                     nullable: true
+ *                     example: u-3
+ *                   deadline:
+ *                     type: string
+ *                     format: date
+ *                     nullable: true
+ *                     example: 2026-01-15
+ *       404:
+ *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get("/:bookId/instances", getBookInstances);
 
 export default router

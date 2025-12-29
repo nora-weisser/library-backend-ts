@@ -1,6 +1,5 @@
 import type { BookCopy } from "../types"
-
-export const bookCopies: BookCopy[] = []
+import { bookCopies } from "../data/store"
 
 export const getAllBorrowRecords = (): BookCopy[] => {
   return bookCopies
@@ -58,4 +57,8 @@ export const returnBook = (userId: string, bookCopyId: string): BookCopy | null 
   })
 
   return bookCopy
+}
+
+export const findBookCopiesByBookId = (bookId: string): BookCopy[] => {
+  return bookCopies.filter(copy => copy.bookID === bookId)
 }
